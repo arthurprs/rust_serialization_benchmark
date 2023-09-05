@@ -63,6 +63,8 @@ ciborium = { version = "0.2.0", optional = true }
 criterion = "0.5"
 dlhn = { version = "0.1.4", optional = true }
 flatbuffers = { version = "23.1.21", optional = true }
+# flexbuffers = { version = "2", optional = true }
+flexbuffers = { path = "/home/arthurprs/dev/flatbuffers/rust/flexbuffers", optional = true }
 libflate = "1.3.0"
 msgpacker = { version = "0.4", optional = true }
 nachricht-serde = { version = "0.4.0", optional = true }
@@ -85,40 +87,42 @@ speedy = { version = "0.8.6", optional = true }
 savefile = { version = "0.16", optional = true }
 savefile-derive = { version = "0.16", optional = true }
 zstd = "0.12.3"
+ditto-crdt ={ path = "/home/arthurprs/dev/ditto/core/crdt"}
 
 [features]
 default = [
-  "abomonation",
-  "abomonation_derive",
-  "alkahest",
+  # "abomonation",
+  # "abomonation_derive",
+  # "alkahest",
   # "bebop",
-  "bincode",
-  "bitcode",
-  "borsh",
-  "bson",
+  # "bincode",
+  # "bitcode",
+  # "borsh",
+  # "bson",
   "bytecheck",
-  "bytemuck",
-  "capnp",
-  "ciborium",
-  "dlhn",
+  # "bytemuck",
+  # "capnp",
+  # "ciborium",
+  # "dlhn",
   "flatbuffers",
-  "msgpacker",
-  "nachricht-serde",
-  "nanoserde",
-  "scale",
-  "postcard",
-  "prost",
-  "prost-build",
+  "flexbuffers",
+  # "msgpacker",
+  # "nachricht-serde",
+  # "nanoserde",
+  # "scale",
+  # "postcard",
+  # "prost",
+  # "prost-build",
   "rkyv",
-  "rmp-serde",
-  "ron",
+  # "rmp-serde",
+  # "ron",
   "serde",
-  "serde_bare",
+  # "serde_bare",
   "serde_cbor",
-  "serde_json",
-  "simd-json",
-  "speedy",
-  "savefile"
+  # "serde_json",
+  # "simd-json",
+  # "speedy",
+  # "savefile"
 ]
 simd-json = ["dep:simd-json", "simd-json-derive"]
 
@@ -131,8 +135,8 @@ rand_pcg = "0.3.1"
 
 [build-dependencies]
 bebop-tools = "2.4.5"
-capnp = "0.16.0"
-capnpc = "0.16.3"
+# capnp = "0.16.0"
+# capnpc = "0.16.3"
 flatc-rust = "0.2.0"
 prost-build = { version = "0.11.8", optional = true }
 

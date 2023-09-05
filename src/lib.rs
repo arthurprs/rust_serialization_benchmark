@@ -18,6 +18,8 @@ pub mod bench_ciborium;
 pub mod bench_dlhn;
 #[cfg(feature = "flatbuffers")]
 pub mod bench_flatbuffers;
+#[cfg(feature = "flexbuffers")]
+pub mod bench_flexbuffers;
 #[cfg(feature = "msgpacker")]
 pub mod bench_msgpacker;
 #[cfg(feature = "nachricht-serde")]

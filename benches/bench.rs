@@ -20,6 +20,8 @@ use rust_serialization_benchmark::bench_ciborium;
 use rust_serialization_benchmark::bench_dlhn;
 #[cfg(feature = "flatbuffers")]
 use rust_serialization_benchmark::bench_flatbuffers;
+#[cfg(feature = "flexbuffers")]
+use rust_serialization_benchmark::bench_flexbuffers;
 #[cfg(feature = "msgpacker")]
 use rust_serialization_benchmark::bench_msgpacker;
 #[cfg(feature = "nachricht-serde")]
@@ -51,6 +53,95 @@ use rust_serialization_benchmark::bench_simd_json;
 #[cfg(feature = "speedy")]
 use rust_serialization_benchmark::bench_speedy;
 use rust_serialization_benchmark::generate_vec;
+
+fn bench_crdt(c: &mut Criterion) {
+    const SAMPLE_DOCUMENT_JSON: &str = r#"
+    {
+        "_time": "2021-12-26T23:12:22.552Z",
+        "device": {
+            "cloud": {
+                "coap": {
+                    "unack": 0
+                },
+                "connection": {
+                    "attempts": 1,
+                    "disconnect_reason": "error",
+                    "disconnects": 23,
+                    "error": 26,
+                    "status": "connected"
+                },
+                "publish": {
+                    "rate_limited": 0
+                }
+            },
+            "deviceID": "2b0026000a47363339343638",
+            "deviceName": "p004",
+            "deviceOSVersion": "1.4.4",
+            "firmwareVersion": 17,
+            "groups": [{
+                "_id": "5bddef083c8baa7f9ccb6fc9",
+                "name": "us-mi-julien"
+            }],
+            "network": {
+                "connection": {
+                    "attempts": 1,
+                    "disconnect_reason": "reset",
+                    "disconnects": 39,
+                    "error": 0,
+                    "status": "connected"
+                },
+                "signal": {
+                    "at": "Wi-Fi",
+                    "level": "Good",
+                    "quality": 100,
+                    "quality_units": "%",
+                    "qualityv": 55,
+                    "qualityv_type": "SNR",
+                    "qualityv_units": "dB",
+                    "strength": 100,
+                    "strength_units": "%",
+                    "strengthv": -37,
+                    "strengthv_type": "RSSI",
+                    "strengthv_units": "dBm"
+                }
+            },
+            "organizationId": "5da78eb005e79f00015bb3ac",
+            "platformId": 6,
+            "platformName": "Photon",
+            "productId": 8177,
+            "productName": "Capture Test Fleet Photon",
+            "system": {
+                "memory": {
+                    "total": 82944,
+                    "used": 38760
+                },
+                "uptime": 6218823
+            }
+        },
+        "service": {
+            "cloud": {
+                "publish": {
+                    "sent": 1976
+                },
+                "uptime": 118537
+            },
+            "coap": {
+                "round_trip": 134
+            },
+            "device": {
+                "status": "ok"
+            }
+        }
+    }"#;
+
+    const BENCH: &'static str = "crdt";
+    let data = ditto_crdt::Document::from_actor_and_json(ditto_crdt::ActorId::const_test(1), SAMPLE_DOCUMENT_JSON).unwrap().internal_doc();
+
+    #[cfg(feature = "flexbuffers")]
+    bench_flexbuffers::bench(BENCH, c, &data);
+    #[cfg(feature = "serde_cbor")]
+    bench_serde_cbor::bench(BENCH, c, &data);
+}
 
 fn bench_log(c: &mut Criterion) {
     use rust_serialization_benchmark::datasets::log::{Log, Logs};
@@ -145,6 +236,9 @@ fn bench_log(c: &mut Criterion) {
             }
         },
     );
+
+    #[cfg(feature = "flexbuffers")]
+    bench_flexbuffers::bench(BENCH, c, &data);
 
     #[cfg(feature = "msgpacker")]
     bench_msgpacker::bench(BENCH, c, &data);
@@ -302,6 +396,9 @@ fn bench_mesh(c: &mut Criterion) {
         },
     );
 
+    #[cfg(feature = "flexbuffers")]
+    bench_flexbuffers::bench(BENCH, c, &data);
+
     #[cfg(feature = "msgpacker")]
     bench_msgpacker::bench(BENCH, c, &data);
 
@@ -448,6 +545,9 @@ fn bench_minecraft_savedata(c: &mut Criterion) {
             }
         },
     );
+
+    #[cfg(feature = "flexbuffers")]
+    bench_flexbuffers::bench(BENCH, c, &data);
 
     #[cfg(feature = "msgpacker")]
     bench_msgpacker::bench(BENCH, c, &data);
@@ -600,6 +700,9 @@ fn bench_mk48(c: &mut Criterion) {
         },
     );
 
+    #[cfg(feature = "flexbuffers")]
+    bench_flexbuffers::bench(BENCH, c, &data);
+
     #[cfg(feature = "msgpacker")]
     bench_msgpacker::bench(BENCH, c, &data);
 
@@ -662,6 +765,7 @@ fn bench_mk48(c: &mut Criterion) {
 }
 
 pub fn criterion_benchmark(c: &mut Criterion) {
+    bench_crdt(c);
     bench_log(c);
     bench_mesh(c);
     bench_minecraft_savedata(c);

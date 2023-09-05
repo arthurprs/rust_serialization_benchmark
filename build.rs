@@ -15,15 +15,15 @@ fn bebop_compile_dataset(name: &'static str) {
     );
 }
 
-fn capnpc_compile_dataset(name: &'static str) -> capnp::Result<()> {
-    let mut command = capnpc::CompilerCommand::new();
-    #[cfg(windows)]
-    command.capnp_executable("prebuilt/capnp.exe");
-    command.file(&format!("src/datasets/{0}/{0}.capnp", name));
-    command.output_path(".");
-    command.default_parent_module(vec!["datasets".into(), name.into()]);
-    command.run()
-}
+// fn capnpc_compile_dataset(name: &'static str) -> capnp::Result<()> {
+//     let mut command = capnpc::CompilerCommand::new();
+//     #[cfg(windows)]
+//     command.capnp_executable("prebuilt/capnp.exe");
+//     command.file(&format!("src/datasets/{0}/{0}.capnp", name));
+//     command.output_path(".");
+//     command.default_parent_module(vec!["datasets".into(), name.into()]);
+//     command.run()
+// }
 
 fn flatc_compile_dataset(name: &'static str) -> flatc_rust::Result<()> {
     #[cfg(windows)]
@@ -62,7 +62,7 @@ fn main() {
     const DATASETS: &[&str] = &["log", "mesh", "minecraft_savedata", "mk48"];
     for &name in DATASETS.iter() {
         // bebop_compile_dataset(name);
-        capnpc_compile_dataset(name).unwrap();
+        // capnpc_compile_dataset(name).unwrap();
         flatc_compile_dataset(name).unwrap();
         #[cfg(feature = "prost-build")]
         prost_compile_dataset(name).unwrap();
